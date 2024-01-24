@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
+import React from "react"
 type TabType = [{ isChecked: boolean; key: string; value: string }];
 
 type RequestStateType = {
@@ -21,7 +21,7 @@ export const handleCheckboxChange = createAsyncThunk(
         ind: number,
         tabletype: "headers" | "body" | "params",
         request:RequestStateType}
-    ): void => {
+    ):any => {
       console.log(request[tabletype])
       console.log(e.target.checked)
         let newParams = request[tabletype].map((parameter: TabType, i: number) => {
