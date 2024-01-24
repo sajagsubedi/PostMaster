@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#paramsTable{
+  @apply w-full  text-start rounded bg-gray-900
+}
+#paramsTable tr td{
+  @apply border border-gray-800 p-1
+}
+
