@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import EditorTable from "./EditorTable";
+import ParamsEditor from "./ParamsEditor.tsx";
+import HeadersEditor from "./HeadersEditor.tsx";
+import BodyEditor from "./BodyEditor.tsx";
 
-type RequestEditorProps = {};
-export default function RequestEditor({}: RequestEditorProps): React.FC {
-    const [selectedTab, setSelectedTab] = useState<String>("params");
+export default function RequestEditor(): React.FC {
+    const [selectedTab, setSelectedTab] = useState<NavigationTabs>("params");
+
     return (
         <>
             <div className="w-full  flex p-1 gap-3 justify-evenly rounded">
@@ -38,26 +40,12 @@ export default function RequestEditor({}: RequestEditorProps): React.FC {
                     Body
                 </button>
             </div>
-            <div className="w-full min-h-48 bg-gray-900 rounded p-2">
-                {selectedTab === "params" && (
-                    <EditorTable
-                        header={{ key: "Key", value: "Value" }}
-                        tabletype="params"
-                    />
-                )}
-                {selectedTab === "headers" && (
-                    <EditorTable
-                        header={{ key: "Key", value: "Value" }}
-                        tabletype="headers"
-                    />
-                )}
-                {selectedTab === "body" && (
-                    <EditorTable
-                        header={{ key: "Key", value: "Value" }}
-                        tabletype="body"
-                    />
-                )}
-            </div>
+                    <div className="w-full min-h-56 bg-gray-900 rounded box-border overflow-hidden p-2">
+
+                {selectedTab === "params" && <ParamsEditor />}
+                {selectedTab === "headers" && <HeadersEditor />}
+                {selectedTab === "body" && <BodyEditor />}
+                </div>
         </>
     );
 }

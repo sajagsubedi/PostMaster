@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-#paramsTable{
+#editTable{
   @apply w-full  text-start rounded bg-gray-900
 }
-#paramsTable tr td{
-  @apply border border-gray-800 p-1
+#editTable tr td{
+  @apply border border-gray-800 p-1 box-border
 }
 

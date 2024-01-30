@@ -1,38 +1,63 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import React from "react"
-type TabType = [{ isChecked: boolean; key: string; value: string }];
-
-type RequestStateType = {
-    params: TabType;
-    headers: TabType;
-    body: TabType;
-};
+import type { PayloadAction } from "@reduxjs/toolkit";
+import React from "react";
 
 const initialState: RequestStateType = {
-    params: [{ isChecked: true, key: "page", value: "10" }],
-    headers: [{ isChecked: true, key: "Auth", value: "Bearer jdjdnundjdh" }],
-    body: [{ isChecked: true, key: "name", value: "Sajag" }]
+    method: "GET",
+    url: "",
+    params: [],
+    headers: [],
+    body: [],
+    jsonbody: "",
+    bodytype: "form",
+    jsonState: undefined
 };
 
 export const handleCheckboxChange = createAsyncThunk(
     "request/handleCheckboxChange",
-    async ({e,ind,tabletype,request}:{
-        e: React.FormEvent<HTMLInputElement>,
-        ind: number,
-        tabletype: "headers" | "body" | "params",
-        request:RequestStateType}
-    ):any => {
-      console.log(request[tabletype])
-      console.log(e.target.checked)
-        let newParams = request[tabletype].map((parameter: TabType, i: number) => {
-          console.log(parameter,i,ind)
-            if (i === ind) {
-                parameter = { ...parameter, isChecked: e.target.checked };
+    ({
+        e,
+        ind,
+        tab,
+        request
+    }: {
+        e: React.FormEvent<HTMLInputElement>;
+        ind: number;
+        tab: NavigationTabs;
+        request: RequestStateType;
+    }): ActionReturnObject => {
+        let newTabValue: Array<ValueType> = request[tab].map(
+            (parameter: ValueType, i: number) => {
+                if (i === ind) {
+                    parameter = { ...parameter, isChecked: e.target.checked };
+                }
+                return parameter;
             }
-            return parameter;
-        });
-        console.log(newParams)
-        return {type:tabletype,data:newParams};
+        );
+        return { type: tab, data: newTabValue };
+    }
+);
+
+export const deleteValue = createAsyncThunk(
+    "request/deleteValue",
+    ({
+        ind,
+        tab,
+        request
+    }: {
+        ind: number;
+        tab: NavigationTabs;
+        request: RequestStateType;
+    }): ActionReturnObject => {
+        let newTabValue: Array<ValueType> = request[tab].map(
+            (parameter: ValueType, i: number) => {
+                if (i === ind) {
+                    return;
+                }
+                return parameter;
+            }
+        );
+        return { type: tab, data: newTabValue };
     }
 );
 
@@ -40,17 +65,59 @@ const requestSlice = createSlice({
     name: "request",
     initialState,
     reducers: {
-        changeParams: (state, action) => {
-            state[action.payload.type] = action.payload.data;
+        setMethod: (state, action: PayloadAction<ReqMethods>) => {
+            state.method = action.payload;
+        },
+        setUrl:(state,action:PayloadAction<String>)=>{
+          state.url=action.payload
+        },
+        changeRequestVal: (state, action: PayloadAction<ValueforChange>) => {
+            state[action.payload.type] = action.payload.value;
+        },
+        addValue: (state, action) => {
+            state[action.payload.type].push(action.payload.value);
+        },
+        setJsonbody: (state, action: PayloadAction<String>) => {
+            state.jsonbody = action.payload;
+        },
+        setBodytype: (state, action: payload<RequestStateType["bodytype"]>) => {
+            state.bodytype = action.payload;
+        },
+        setJsonState: (state, action: PayloadAction<String>) => {
+            try {
+                JSON.parse(action.payload);
+            } catch (e) {
+              state.jsonState=false
+              return
+            }
+              state.jsonState=true
         }
     },
     extraReducers: builder => {
-        builder.addCase(handleCheckboxChange.fulfilled, (state, action) => {
-            const { type, data } = action.payload;
-            state[type] = data;
-        });
+        builder.addCase(
+            handleCheckboxChange.fulfilled,
+            (state, action: PayloadAction<ActionReturnObject>) => {
+                const { type, data } = action.payload;
+                state[type] = data;
+            }
+        );
+        builder.addCase(
+            deleteValue.fulfilled,
+            (state, action: PayloadAction<ActionReturnObject>) => {
+                const { type, data } = action.payload;
+                state[type] = data;
+            }
+        );
     }
 });
 
-export const { changeParams } = requestSlice.actions;
+export const {
+    changeRequestVal,
+    setMethod,
+    addValue,
+    setJsonbody,
+    setBodytype,
+    setJsonState,
+    setUrl
+} = requestSlice.actions;
 export default requestSlice.reducer;
