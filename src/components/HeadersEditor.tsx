@@ -7,50 +7,50 @@ import {
     changeRequestVal,
     addValue
 } from "../redux/slices/requestSlice.tsx";
-export default function HeadersEditor(): React.FC {
+export default function HeadersEditor(){
     const request = useSelector((state: any) => state.request);
     const dispatch = useDispatch();
     const [inputState, setInputState] = useState<InputStateProps>({
         ind: -1,
-        type: ""
+        type: "key"
     });
     const [addInput, setAddInput] = useState({ key: "", value: "" });
 
     const checkBoxChange = (
-        e: React.FormEvent<HTMLInputElement>,
-        ind: Number
+        e: React.ChangeEvent<HTMLInputElement>,
+        ind: number
     ): void => {
-        dispatch(handleCheckboxChange({ e, ind, tab: "headers", request }));
+        dispatch(handleCheckboxChange({ e, ind, tab: "headers", request }) as any);
     };
-    const handleDelete = (ind: Number): void => {
-        dispatch(deleteValue({ ind, tab: "headers", request }));
+    const handleDelete = (ind: number): void => {
+        dispatch(deleteValue({ ind, tab: "headers", request }) as any);
     };
     const handleEditChange = (
-        e: React.FormEvent<HTMLInputElement>,
-        ind: Number,
+        e: React.ChangeEvent<HTMLInputElement>,
+        ind: number,
         type: "key" | "value"
     ) => {
-        let newHeaders = request.headers.map((headerItem, indh) => {
-            let newObj = { ...headerItem };
+        let newHeaders:Array<ValueType> = request.headers.map((headerItem:ValueType, indh:number) => {
+            let newObj:ValueType = { ...headerItem };
             if (indh === ind) {
                 newObj[type] = e.target.value;
             }
             return newObj;
         });
-        dispatch(changeRequestVal({ value: newHeaders, type: "headers" }));
+        dispatch(changeRequestVal({ value: newHeaders, type: "headers" }) as any);
     };
 
-    const handleAddChange = (e: React.FormEvent<HTMLInputElement>) => {
-        let newObj = { ...addInput };
+    const handleAddChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let newObj:Record<string, string> = { ...addInput };
         newObj[e.target.name] = e.target.value;
-        setAddInput(newObj);
+        setAddInput(newObj as any);
     };
     const handleAdd = () => {
         dispatch(
             addValue({
                 value: { isChecked: true, ...addInput },
                 type: "headers"
-            })
+            } as any)
         );
         setAddInput({ key: "", value: "" });
     };
@@ -65,7 +65,7 @@ export default function HeadersEditor(): React.FC {
                     </tr>
                 </thead>
                 <tbody>
-                    {request.headers.map((parameter: TabType, ind: Number) => {
+                    {request.headers.map((parameter: ValueType, ind: number) => {
                         if (!parameter) return;
                         return (
                             <tr key={ind}>
@@ -124,7 +124,7 @@ export default function HeadersEditor(): React.FC {
                                 </td>
 
                                 <td>
-                                    <FaTrash onClick={e => handleDelete(ind)} />
+                                    <FaTrash onClick={() => handleDelete(ind)} />
                                 </td>
                             </tr>
                         );

@@ -21,19 +21,19 @@ export const handleCheckboxChange = createAsyncThunk(
         tab,
         request
     }: {
-        e: React.FormEvent<HTMLInputElement>;
+        e: React.ChangeEvent<HTMLInputElement>;
         ind: number;
         tab: NavigationTabs;
         request: RequestStateType;
-    }): ActionReturnObject => {
-        let newTabValue: Array<ValueType> = request[tab].map(
-            (parameter: ValueType, i: number) => {
-                if (i === ind) {
-                    parameter = { ...parameter, isChecked: e.target.checked };
-                }
-                return parameter;
-            }
-        );
+    }): ActionReturnObject => {let newTabValue: Array<ValueType> = (request[tab] ?? []).map(
+    (parameter: ValueType, i: number) => {
+        if (i === ind) {
+            parameter = { ...parameter, isChecked: e.target.checked };
+        }
+        return parameter;
+    }
+);
+
         return { type: tab, data: newTabValue };
     }
 );
@@ -49,12 +49,9 @@ export const deleteValue = createAsyncThunk(
         tab: NavigationTabs;
         request: RequestStateType;
     }): ActionReturnObject => {
-        let newTabValue: Array<ValueType> = request[tab].map(
-            (parameter: ValueType, i: number) => {
-                if (i === ind) {
-                    return;
-                }
-                return parameter;
+        let newTabValue: Array<ValueType> = (request[tab]??[]).filter(
+            (_: ValueType, i: number) => {
+               return i!==ind;
             }
         );
         return { type: tab, data: newTabValue };
@@ -65,25 +62,25 @@ const requestSlice = createSlice({
     name: "request",
     initialState,
     reducers: {
-        setMethod: (state, action: PayloadAction<ReqMethods>) => {
+        setMethod: (state:RequestStateType, action: PayloadAction<ReqMethods>) => {
             state.method = action.payload;
         },
-        setUrl:(state,action:PayloadAction<String>)=>{
+        setUrl:(state:RequestStateType,action:PayloadAction<string>)=>{
           state.url=action.payload
         },
-        changeRequestVal: (state, action: PayloadAction<ValueforChange>) => {
+        changeRequestVal: (state:RequestStateType, action: PayloadAction<ValueforChange>) => {
             state[action.payload.type] = action.payload.value;
         },
-        addValue: (state, action) => {
-            state[action.payload.type].push(action.payload.value);
+        addValue: (state:RequestStateType, action:PayloadAction<AddValuePayload>) => {
+           (state[action.payload.type]??[]).push(action.payload.value);
         },
-        setJsonbody: (state, action: PayloadAction<String>) => {
+        setJsonbody: (state:RequestStateType, action: PayloadAction<string>) => {
             state.jsonbody = action.payload;
         },
-        setBodytype: (state, action: payload<RequestStateType["bodytype"]>) => {
+        setBodytype: (state:RequestStateType, action:PayloadAction<RequestStateType["bodytype"]>) => {
             state.bodytype = action.payload;
         },
-        setJsonState: (state, action: PayloadAction<String>) => {
+        setJsonState: (state:RequestStateType, action: PayloadAction<string>) => {
             try {
                 JSON.parse(action.payload);
             } catch (e) {
@@ -96,14 +93,14 @@ const requestSlice = createSlice({
     extraReducers: builder => {
         builder.addCase(
             handleCheckboxChange.fulfilled,
-            (state, action: PayloadAction<ActionReturnObject>) => {
+            (state:RequestStateType, action: PayloadAction<ActionReturnObject>) => {
                 const { type, data } = action.payload;
                 state[type] = data;
             }
         );
         builder.addCase(
             deleteValue.fulfilled,
-            (state, action: PayloadAction<ActionReturnObject>) => {
+            (state:RequestStateType, action: PayloadAction<ActionReturnObject>) => {
                 const { type, data } = action.payload;
                 state[type] = data;
             }

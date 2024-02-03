@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import {useSelector,useDispatch} from "react-redux"
 import { setMethod } from "../redux/slices/requestSlice.tsx";
 
-export default function ReqDropDown(): React.FC{
+export default function ReqDropDown(){
     const [dropDown, setDropDown] = useState<boolean>(false);
     const requests: Array<ReqMethods> = ["GET", "POST", "PUT", "DELETE", "PATCH"];
     const dispatch=useDispatch()
-    const {method}=useSelector((state):any=>state.request)
+    const {method}=useSelector((state:any)=>state.request)
     return (
         <div>
             <button

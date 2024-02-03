@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ParamsEditor from "./ParamsEditor.tsx";
 import HeadersEditor from "./HeadersEditor.tsx";
 import BodyEditor from "./BodyEditor.tsx";
 
-export default function RequestEditor(): React.FC {
+export default function RequestEditor() {
     const [selectedTab, setSelectedTab] = useState<NavigationTabs>("params");
 
     return (

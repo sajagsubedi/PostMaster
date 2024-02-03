@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-const ResponseViewer = (): React.FC => {
-    const { responseData } = useSelector(state => state.response);
+const ResponseViewer = () => {
+    const { responseData,isLoading } = useSelector((state:any) => state.response);
     const [statusClassName, setStatusClassName] = useState("");
     useEffect(() => {
       if(responseData){
@@ -25,7 +25,8 @@ const ResponseViewer = (): React.FC => {
             <div className="flex w-full">
                 <h1 className="font-semibold text-xl">Response</h1>
             </div>
-            {responseData ? (
+            {isLoading && <button id="loading"></button>}
+           {!isLoading && (responseData ? (
                 <div className="flex flex-col w-full">
                     <div className="flex w-full justify-end border-b border-slate-800">
                         <span>Status:</span>&nbsp;
@@ -38,7 +39,8 @@ const ResponseViewer = (): React.FC => {
                 </div>
             ) : (
                 <h2>Your response will appear here</h2>
-            )}
+            ))
+           }
         </div>
     );
 };

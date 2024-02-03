@@ -1,7 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
-const initialState = {responseData: undefined};
+interface FormBodyType {
+    [key: string]: string;
+}
+interface ResponseType {
+    responseData?: { status?: number; data?: any };
+    isLoading: boolean;
+}
+
+const initialState: ResponseType = {
+    isLoading: false
+};
 
 export const fetchapi = createAsyncThunk(
     "response/fetchapi",
@@ -28,7 +39,7 @@ export const fetchapi = createAsyncThunk(
             // Handling body
             let reqBody;
             if (request.bodytype === "form" && request.body) {
-                let formBody = {};
+                let formBody: FormBodyType = {};
                 request.body.forEach(bodyItem => {
                     formBody[bodyItem.key] = bodyItem.value;
                 });
@@ -48,7 +59,7 @@ export const fetchapi = createAsyncThunk(
             // Sending request
             let response = await axios(axiosConfig);
             console.log(response);
-            return {data:response.data,status: response.status}
+            return { data: response.data, status: response.status };
         } catch (err) {
             console.log(err);
         }
@@ -58,13 +69,17 @@ export const fetchapi = createAsyncThunk(
 const responseSlice = createSlice({
     name: "response",
     initialState,
-    reducers: {},
+    reducers: {
+        setLoading: (state: ResponseType, action: PayloadAction<boolean>) => {
+            state.isLoading = action.payload;
+        }
+    },
     extraReducers: builder => {
         builder.addCase(fetchapi.fulfilled, (state, action) => {
-            state.responseData= action.payload;
+            state.responseData = action.payload;
+            state.isLoading=false
         });
     }
 });
-
-
+export const { setLoading } = responseSlice.actions;
 export default responseSlice.reducer;

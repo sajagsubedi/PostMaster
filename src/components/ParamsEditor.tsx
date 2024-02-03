@@ -8,49 +8,50 @@ import {
     addValue
 } from "../redux/slices/requestSlice.tsx";
 
-const ParamsEditor: React.FC = () => {
+const ParamsEditor= () => {
     const request = useSelector((state: any) => state.request);
     const dispatch = useDispatch();
     const [addInput, setAddInput] = useState({ key: "", value: "" });
     const [inputState, setInputState] = useState<InputStateProps>({
         ind: -1,
-        type: ""
+        type: "key"
     });
     const checkBoxChange = (
-        e: React.FormEvent<HTMLInputElement>,
-        ind: Number
+        e: React.ChangeEvent<HTMLInputElement>,
+        ind: number
     ): void => {
-        dispatch(handleCheckboxChange({ e, ind, tab: "params", request }));
+        dispatch(handleCheckboxChange({ e, ind, tab: "params", request })as any);
     };
     const handleEditChange = (
-        e: React.FormEvent<HTMLInputElement>,
-        ind: Number,
+        e: React.ChangeEvent<HTMLInputElement>,
+        ind: number,
         type: "key" | "value"
     ) => {
-        let newParams = request.params.map((paramItem, indh) => {
+        let newParams = request.params.map((paramItem:ValueType, indh:number) => {
             let newObj = { ...paramItem };
             if (indh === ind) {
                 newObj[type] = e.target.value;
             }
             return newObj;
         });
-        dispatch(changeRequestVal({ value: newParams, type: "params" }));
+        dispatch(changeRequestVal({ value: newParams, type: "params" })as any);
     };
 
-    const handleDelete = (ind: Number): void => {
-        dispatch(deleteValue({ ind, tab: "params", request }));
+    const handleDelete = (ind: number): void => {
+        dispatch(deleteValue({ ind, tab: "params", request }) as any);
     };
-    const handleAddChange = (e: React.FormEvent<HTMLInputElement>) => {
-        let newObj = { ...addInput };
+    const handleAddChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let newObj:Record<string, string> = { ...addInput };
+        console.log(e)
         newObj[e.target.name] = e.target.value;
-        setAddInput(newObj);
+        setAddInput(newObj as any);
     };
     const handleAdd = () => {
         dispatch(
             addValue({
                 value: { isChecked: true, ...addInput },
                 type: "params"
-            })
+            } as any)
         );
         setAddInput({key:"",value:""})
     };
@@ -66,7 +67,7 @@ const ParamsEditor: React.FC = () => {
                 </tr>
             </thead>
             <tbody>
-                {request.params.map((parameter: TabType, ind: Number) => {
+                {request.params.map((parameter: ValueType, ind: number) => {
                     if (!parameter) return;
                     return (
                         <tr key={ind}>
@@ -120,7 +121,7 @@ const ParamsEditor: React.FC = () => {
                                 )}
                             </td>
                             <td>
-                                <FaTrash onClick={e => handleDelete(ind)} />
+                                <FaTrash onClick={() => handleDelete(ind)} />
                             </td>
                         </tr>
                     );

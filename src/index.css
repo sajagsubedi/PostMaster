@@ -8,4 +8,6 @@
 #editTable tr td{
   @apply border border-gray-800 p-1 box-border
 }
-
+#loading{
+  @apply bg-transparent p-2 rounded-full border-8 border-dotted animate-spin border-gray-500
+}

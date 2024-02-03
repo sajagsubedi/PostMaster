@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import Navbar from "./components/Navbar.tsx";
 import RequestBuilder from "./components/RequestBuilder.tsx";
 import ResponseViewer from "./components/ResponseViewer.tsx";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const App: React.FC = () => {

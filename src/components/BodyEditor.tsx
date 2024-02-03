@@ -1,4 +1,4 @@
-import React, { useState,useEffect} from "react";
+import React, { useState } from "react";
 import { FaTrash, FaPlus } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -9,51 +9,55 @@ import {
     setJsonbody,
     setBodytype,
     setJsonState
-} from "../redux/slices/requestSlice.tsx";
+} from "../redux/slices/requestSlice";
 
-function BodyForm(): React.FC {
+function BodyForm() {
     const request = useSelector((state: any) => state.request);
     const dispatch = useDispatch();
     const [addInput, setAddInput] = useState({ key: "", value: "" });
     const [inputState, setInputState] = useState<InputStateProps>({
         ind: -1,
-        type: ""
+        type: "key"
     });
+
     const checkBoxChange = (
-        e: React.FormEvent<HTMLInputElement>,
-        ind: Number
+        e: React.ChangeEvent<HTMLInputElement>,
+        ind: number
     ): void => {
-        dispatch(handleCheckboxChange({ e, ind, tab: "body", request }));
+        dispatch(handleCheckboxChange({ e, ind, tab: "body", request }) as any);
     };
+
     const handleEditChange = (
-        e: React.FormEvent<HTMLInputElement>,
-        ind: Number,
+        e: React.ChangeEvent<HTMLInputElement>,
+        ind: number,
         type: "key" | "value"
     ) => {
-        let newBody = request.body.map((bodyItem, indh) => {
+        let newBody = request.body.map((bodyItem: ValueType, indh: number) => {
             let newObj = { ...bodyItem };
             if (indh === ind) {
                 newObj[type] = e.target.value;
             }
             return newObj;
         });
-        dispatch(changeRequestVal({ value: newBody, type: "body" }));
+        dispatch(changeRequestVal({ value: newBody, type: "body" }) as any);
     };
 
-    const handleDelete = (ind: Number): void => {
-        dispatch(deleteValue({ ind, tab: "body", request }));
+    const handleDelete = (ind: number): void => {
+        dispatch(deleteValue({ ind, tab: "body", request }) as any);
     };
-    const handleAddChange = (e: React.FormEvent<HTMLInputElement>) => {
-        let newObj = { ...addInput };
+
+    const handleAddChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let newObj:Record<string, string> = { ...addInput };
         newObj[e.target.name] = e.target.value;
-        setAddInput(newObj);
+        setAddInput(newObj as any);
     };
+
     const handleAdd = () => {
         dispatch(
             addValue({
                 value: { isChecked: true, ...addInput },
                 type: "body"
-            })
+            }) as any
         );
         setAddInput({ key: "", value: "" });
     };
@@ -69,8 +73,8 @@ function BodyForm(): React.FC {
                 </tr>
             </thead>
             <tbody>
-                {request.body.map((parameter: TabType, ind: Number) => {
-                    if (!parameter) return;
+                {request.body.map((parameter: ValueType, ind: number) => {
+                    if (!parameter) return null;
                     return (
                         <tr key={ind}>
                             <td>
@@ -86,8 +90,8 @@ function BodyForm(): React.FC {
                                     setInputState({ ind, type: "key" });
                                 }}
                             >
-                                {inputState.ind == ind &&
-                                inputState.type == "key" ? (
+                                {inputState.ind === ind &&
+                                inputState.type === "key" ? (
                                     <input
                                         className="bg-gray-900 w-full h-6 border-box"
                                         value={parameter.key}
@@ -107,8 +111,8 @@ function BodyForm(): React.FC {
                                     setInputState({ ind, type: "value" });
                                 }}
                             >
-                                {inputState.ind == ind &&
-                                inputState.type == "value" ? (
+                                {inputState.ind === ind &&
+                                inputState.type === "value" ? (
                                     <input
                                         className="bg-gray-900 w-full h-6 border-box"
                                         value={parameter.value}
@@ -124,7 +128,7 @@ function BodyForm(): React.FC {
                             </td>
 
                             <td>
-                                <FaTrash onClick={e => handleDelete(ind)} />
+                                <FaTrash onClick={() => handleDelete(ind)} />
                             </td>
                         </tr>
                     );
@@ -160,16 +164,23 @@ function BodyForm(): React.FC {
         </table>
     );
 }
-function BodyJson(): React.FC {
-    const request = useSelector(state => state.request);
+
+function BodyJson() {
+    const request = useSelector((state: any) => state.request);
     const dispatch = useDispatch();
-    const handleInputChange = (e:React.FormEvent<HTMLTextAreaElement>)=>{
-      dispatch(setJsonbody(e.target.value));
-      dispatch(setJsonState(e.target.value))
-    }
+    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        dispatch(setJsonbody(e.target.value) as any);
+        dispatch(setJsonState(e.target.value) as any);
+    };
     return (
         <div className="flex flex-col items-end relative">
-            <span className={`min-h-3 min-w-3 max-w-3 p-1  rounded-full absolute top-1 right-1 shadow ${request.jsonState?"shadow-green-900 bg-green-500":"shadow-red-900 bg-red-500"}`}></span>
+            <span
+                className={`min-h-3 min-w-3 max-w-3 p-1  rounded-full absolute top-1 right-1 shadow ${
+                    request.jsonState
+                        ? "shadow-green-900 bg-green-500"
+                        : "shadow-red-900 bg-red-500"
+                }`}
+            ></span>
             <textarea
                 className="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 h-36 text-base outline-none text-gray-100 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
                 value={request.jsonbody}
@@ -178,31 +189,32 @@ function BodyJson(): React.FC {
         </div>
     );
 }
-export default function BodyEditor(): React.FC {
-  const dispatch=useDispatch()
-  const {bodytype}=useSelector(state=>state.request)
+
+export default function BodyEditor() {
+    const dispatch = useDispatch();
+    const { bodytype } = useSelector((state: any) => state.request);
     return (
         <>
             <div className="flex gap-2 p-1 mb-2">
                 <button
                     className={`bg-black p-1 rounded ${
-                        bodytype == "form" ? "border" : ""
+                        bodytype === "form" ? "border" : ""
                     }`}
-                    onClick={() => dispatch(setBodytype("form"))}
+                    onClick={() => dispatch(setBodytype("form") as any)}
                 >
                     Form
                 </button>
                 <button
                     className={`bg-black p-1 rounded ${
-                        bodytype == "json" ? "border" : ""
+                        bodytype === "json" ? "border" : ""
                     }`}
-                    onClick={() => dispatch(setBodytype("json"))}
+                    onClick={() => dispatch(setBodytype("json") as any)}
                 >
                     JSON
                 </button>
             </div>
-            {bodytype == "form" && <BodyForm />}
-            {bodytype == "json" && <BodyJson />}
+            {bodytype === "form" && <BodyForm />}
+            {bodytype === "json" && <BodyJson />}
         </>
     );
 }

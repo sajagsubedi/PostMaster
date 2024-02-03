@@ -14,19 +14,24 @@ interface RequestStateType {
     params?: Array<ValueType>;
     headers?: Array<ValueType>;
     body?: Array<ValueType>;
-    jsonbody?: String;
-    bodytype?:"json"|"form";
-    jsonState?:boolean;
+    jsonbody?: string;
+    bodytype?: "json" | "form";
+    jsonState?: boolean;
 }
 interface ActionReturnObject {
     type: NavigationTabs;
     data: Array<ValueType>;
 }
 interface InputStateProps {
-    ind: Number;
+    ind: number;
     type: "key" | "value";
 }
 interface ValueforChange {
     type: NavigationTabs;
-    value: Array<ValueType> | ValueType;
+    value: Array<ValueType>;
+}
+
+interface AddValuePayload{
+  type:NavigationTabs;
+  value:ValueType;
 }
