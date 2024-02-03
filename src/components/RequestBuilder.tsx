@@ -10,7 +10,6 @@ export default function RequestBuilder(){
   const dispatch=useDispatch();
   
   const handleSendClick = () => {
-    dispatch(setLoading(true))
   try{
    new URL(request.url);
   }
@@ -22,6 +21,7 @@ export default function RequestBuilder(){
     toast.error("Invalid JSON body");
     return;
   }
+    dispatch(setLoading(true))
   dispatch(fetchapi(request) as any)
   };
   
