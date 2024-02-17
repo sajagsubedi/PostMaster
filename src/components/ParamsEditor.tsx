@@ -42,7 +42,6 @@ const ParamsEditor= () => {
     };
     const handleAddChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let newObj:Record<string, string> = { ...addInput };
-        console.log(e)
         newObj[e.target.name] = e.target.value;
         setAddInput(newObj as any);
     };

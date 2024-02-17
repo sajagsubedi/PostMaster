@@ -31,7 +31,23 @@ interface ValueforChange {
     value: Array<ValueType>;
 }
 
-interface AddValuePayload{
-  type:NavigationTabs;
-  value:ValueType;
+interface AddValuePayload {
+    type: NavigationTabs;
+    value: ValueType;
+}
+interface EndPType {
+    name: string;
+    data: RequestStateType;
+}
+interface CollectionItem {
+    name: string;
+    endpoints: EndPType[];
+}
+interface CollectionsType {
+    collections: Array<CollectionItem>;
+    endpPath: number[];
+}
+interface AddEndpointPayload {
+    data: EndPType;
+    ind: number;
 }

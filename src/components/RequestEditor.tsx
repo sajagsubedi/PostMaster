@@ -8,7 +8,7 @@ export default function RequestEditor() {
 
     return (
         <>
-            <div className="w-full  flex p-1 gap-3 justify-evenly rounded">
+            <div className="w-full  flex p-1 gap-3 justify-start rounded">
                 <button
                     className={`p-2 bg-gray-900 rounded text-white w-20 ${
                         selectedTab == "params" ? "border border-white" : ""

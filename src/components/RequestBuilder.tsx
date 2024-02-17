@@ -26,7 +26,7 @@ export default function RequestBuilder(){
   };
   
   return(
-        <section className="rounded-lg bg-gray-800 shadow-lg p-4 max-w-md w-full ">
+        <section className="rounded-lg bg-gray-800 shadow-lg p-4 w-full ">
           <div className="flex items-center gap-4 mb-4">
             <ReqDropDown/>
             <input type="url" className="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" placeholder="Enter Url"
@@ -36,7 +36,7 @@ export default function RequestBuilder(){
           <RequestEditor/>
           <div className="mt-4">
             <button
-              className="bg-black text-white py-2 px-3 w-full rounded shadow"
+              className="bg-indigo-600 text-white py-2 px-3 w-full rounded shadow"
               onClick={handleSendClick}
             >
               Send

@@ -5,13 +5,27 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 interface FormBodyType {
     [key: string]: string;
 }
+interface ResponseDataType {
+    status?: number;
+    data?: any;
+}
 interface ResponseType {
-    responseData?: { status?: number; data?: any };
+    responseData?: ResponseDataType;
     isLoading: boolean;
 }
 
 const initialState: ResponseType = {
-    isLoading: false
+    isLoading: false,
+    responseData: undefined
+};
+
+const hasResponse = (
+    err: unknown
+): err is { response: { data: any; status: number } } => {
+    return (
+        (err as { response: { data: any; status: number } }).response !==
+        undefined
+    );
 };
 
 export const fetchapi = createAsyncThunk(
@@ -58,10 +72,11 @@ export const fetchapi = createAsyncThunk(
 
             // Sending request
             let response = await axios(axiosConfig);
-            console.log(response);
-            return { data: response.data, status: response.status };
+            return response;
         } catch (err) {
-            console.log(err);
+            if (hasResponse(err)) {
+                return err.response;
+            }
         }
     }
 );
@@ -75,9 +90,32 @@ const responseSlice = createSlice({
         }
     },
     extraReducers: builder => {
+        builder.addCase(fetchapi.pending, state => {
+            state.isLoading = true;
+        });
         builder.addCase(fetchapi.fulfilled, (state, action) => {
-            state.responseData = action.payload;
-            state.isLoading=false
+            state.responseData = {};
+            if (action.payload) {
+                state.responseData.status = (
+                    action.payload as ResponseDataType
+                ).status;
+                state.responseData.data = (
+                    action.payload as ResponseDataType
+                ).data;
+            }
+            state.isLoading = false;
+        });
+        builder.addCase(fetchapi.rejected, (state, action) => {
+            state.responseData = {};
+            if (action.payload) {
+                state.responseData.status = (
+                    action.payload as ResponseDataType
+                ).status;
+                state.responseData.data = (
+                    action.payload as ResponseDataType
+                ).data;
+            }
+            state.isLoading = false;
         });
     }
 });
