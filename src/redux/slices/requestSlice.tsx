@@ -8,9 +8,9 @@ const initialState: RequestStateType = {
     params: [],
     headers: [],
     body: [],
-    jsonbody: "",
+    jsonbody: "{}",
     bodytype: "form",
-    jsonState: undefined
+    jsonState: true
 };
 
 export const handleCheckboxChange = createAsyncThunk(

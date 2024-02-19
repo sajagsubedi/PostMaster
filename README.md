@@ -1,30 +1,21 @@
-# React + TypeScript + Vite
+# PostMaster: A Web App for Sending API Requests
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+PostMaster is a web app that allows you to send requests to APIs using various HTTP methods. It has a user-friendly interface for filling in headers, parameters, and body data. You can save collections of endpoints in your browser's local storage and manage them using the sidebar.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Send requests to APIs using GET, POST, PUT, DELETE, and PATCH methods
+- Fill in headers, parameters, and body data through a user-friendly form
+- Save collections of endpoints in the local storage of the browser
+- Open a sidebar to create and manage collections
+- Format the response in a readable way
 
-## Expanding the ESLint configuration
+## Technologies Used
+- React
+- TypeScript
+- React-Redux-Toolkit
+- Tailwind CSS
+ 
+## License
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+PostMaster is licensed under the MIT License.

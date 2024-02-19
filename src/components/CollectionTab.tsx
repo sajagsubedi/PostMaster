@@ -64,7 +64,7 @@ function CollectionCard({
                         <h3 className="text-base">No endpoints</h3>
                     )}
                     {collection.endpoints.length !== 0 &&
-                        collection.endpoints.map((end:EndPType, i: number) => (
+                        collection.endpoints.map((end: EndPType, i: number) => (
                             <li
                                 className="flex items-center text-base gap-1 w-full justify-between border-t border-gray-800"
                                 key={i}
@@ -145,7 +145,7 @@ export default function CollectionTab() {
                         </button>
 
                         <div className="w-full">
-                            {collections.collections.length === 0 ? (
+                            { (collections.collections.length=== 0) ? (
                                 <h3 className="text-center font-bold text-xl">
                                     No collections
                                 </h3>
@@ -157,7 +157,10 @@ export default function CollectionTab() {
 
                                     <div className="w-full flex flex-col mt-2">
                                         {collections.collections.map(
-                                            (collection:CollectionItem, i:number) => (
+                                            (
+                                                collection: CollectionItem,
+                                                i: number
+                                            ) => (
                                                 <CollectionCard
                                                     key={i}
                                                     collection={collection}

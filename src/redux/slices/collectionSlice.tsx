@@ -15,7 +15,7 @@ const collectionSlice = createSlice({
             const collections = JSON.parse(
                 localStorage.getItem("collections") || "{}"
             );
-            state.collections = collections.collections;
+            state.collections = collections.collections || [];
         },
         addCollection: (state, action: PayloadAction<string>) => {
             state.collections.push({ name: action.payload, endpoints: [] });
@@ -33,7 +33,7 @@ const collectionSlice = createSlice({
             state.endpPath = [ind, state.collections[ind].endpoints.length - 1];
             updateLocalStorage(state);
         },
-        clearEndpPath: (state) => {
+        clearEndpPath: state => {
             state.endpPath = [-1, -1];
             updateLocalStorage(state);
         },
